@@ -5,7 +5,7 @@ class LogoutPage {
         this.page = page
         this.hamburger=page.locator('//*[@id="react-burger-menu-btn"]')
         this.logoutButton=page.locator('[data-test="logout-sidebar-link"]')
-        this.message=page.locator('//*[@id="root"]/div/div[1]')
+        this.messagelocator=page.locator('//*[@id="root"]/div/div[1]')
     }
     async logout(){
         await this.hamburger.click()

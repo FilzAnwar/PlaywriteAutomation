@@ -1,19 +1,7 @@
 {
     "MessageLogout": [
         {
-            "messageLogout": "Swag Labs"
-        },
-         {
-            "messageLogout": "Swag Labs"
-        },
-        
-         {
-            "messageLogout": "Swag Labs"
-        },
-         {
-            "messageLogout": "Swag Labs"
+            "message": "Swag Labs"
         }
-        
-
     ]
 }

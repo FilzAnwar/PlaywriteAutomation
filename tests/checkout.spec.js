@@ -2,10 +2,11 @@ import { test, expect } from '@playwright/test';
 
 import logintestdata from '../testdata/logintestdata.json';
 import addtocartdata from '../testdata/addtocartdata.json';
+import checkoutdata from '../testdata/checkoutdata.json'; 
+
 import LoginPage from '../pages/loginpage';
 import AddToCart from '../pages/AddtoCart';
 import Checkout from '../pages/Checkout';
-import checkoutdata from '../testdata/addtocartdata.json';
 
 
 test('Checkout', async ({ page }) => {
@@ -42,6 +43,7 @@ test('Checkout', async ({ page }) => {
     await cartpage.openCart();
 
 
+
     // VERIFY PRODUCTS IN CART
     for (const product of addtocartdata.products) {
 
@@ -64,6 +66,6 @@ test('Checkout', async ({ page }) => {
 
 
     // VERIFY CHECKOUT COMPLETE
-    await expect(checkout.checkoutPage)
-        .toHaveText('Thank you for your order!');
+    await expect(checkout.checkoutEnd)
+        .toHaveText(checkoutData.message);
 });
