@@ -4,7 +4,7 @@ import logoutdata from "../testdata/logoutdata.json"
 
 import logintestdata from '../testdata/logintestdata.json';
 
-import LoginPage from '../pages/loginpage';
+import LoginPage from '../pages/LoginPage';
 
 
 test('Add Product To Cart', async ({ page }) => {
