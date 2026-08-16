@@ -4,7 +4,7 @@ import logintestdata from '../testdata/logintestdata.json';
 import addtocartdata from '../testdata/addtocartdata.json';
 import checkoutdata from '../testdata/checkoutdata.json'; 
 
-import LoginPage from '../pages/loginpage';
+import LoginPage from '../pages/LoginPage';
 import AddToCart from '../pages/AddtoCart';
 import Checkout from '../pages/Checkout';
 

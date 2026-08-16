@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 import logintestdata from '../testdata/logintestdata.json';
 import addtocartdata from '../testdata/addtocartdata.json';
 
-import LoginPage from '../pages/loginpage';
+import LoginPage from '../pages/LoginPage';
 import AddToCart from '../pages/AddtoCart';
 
 

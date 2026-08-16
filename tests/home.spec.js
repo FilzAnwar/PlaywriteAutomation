@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test'
 import logintestdata from '../testdata/logintestdata.json'
-import LoginPage from '../pages/loginpage';
+import LoginPage from '../pages/LoginPage';
 import HomePage from '../pages/HomePage';
 
 
