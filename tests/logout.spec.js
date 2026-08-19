@@ -25,8 +25,8 @@ test('Add Product To Cart', async ({ page }) => {
     // LOGOUt Page
     
     await logout.logout()
-     await expect(logout.message)
-        .toHaveText(data2.messageLogout);
+     await expect(logout.messagelocator)
+        .toHaveText(data2.message);
 
 
   
