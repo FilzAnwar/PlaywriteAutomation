@@ -1,16 +1,13 @@
-import { test, expect } from "@playwright/test";
-import logintestdata from "../testdata/logintestdata.json";
-import LoginPage from "../pages/LoginPage";
+import { test, expect } from '../fixtures/testSetup.js';
+import logintestdata from '../testdata/logintestdata.json'
+import LoginPage from '../pages/LoginPage.js';
+import { attachStepScreenshot } from '../utilities/screenshot.js';
 
 test.describe("Login", () => {
   test("Valid login case for user ", async ({ page }) => {
     const login = new LoginPage(page);
     const loginData = logintestdata.validUsers[0];
 
-    // OPEN PAGE
-    await test.step("Open login Page", async () => {
-      await login.gotoURL();
-    });
 
     // LOGIN
     await test.step("Login with valid credentials", async () => {
@@ -20,7 +17,7 @@ test.describe("Login", () => {
     // VERIFY
     await test.step("Verify login success message", async () => {
       await expect(login.validmessageLocator).toHaveText(loginData.message);
-      await login.attachScreenshot("05 - Welcome Message Should be displayed");
+      await attachStepScreenshot(page, '05 - Products');
     });
   });
 });

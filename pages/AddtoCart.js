@@ -1,20 +1,41 @@
-class AddToCart{
-    constructor (page ){
-         this.page = page
-         this.cartButton = page.locator('[data-test="shopping-cart-link"]')
-         this.cartItems = page.locator('.cart_item');
+import { attachStepScreenshot } from '../utilities/screenshot.js';
 
+class AddToCart {
+    constructor(page) {
+        this.page = page;
+
+        this.cartButton = page.locator(
+            '[data-test="shopping-cart-link"]'
+        );
+
+        this.cartItems = page.locator('.cart_item');
     }
-    async addtoCart(productTestId){
-        await this.page.locator(`[data-test="${productTestId}"]`)
+
+    async addtoCart(productTestId) {
+        await this.page
+            .locator(`[data-test="${productTestId}"]`)
             .click();
+
+        await attachStepScreenshot(
+            this.page,
+            '01 - Click Add to Cart for Product'
+        );
     }
-    async openCart(){
-        await this.cartButton.click()
+
+    async openCart() {
+        await this.cartButton.click();
+
+        await attachStepScreenshot(
+            this.page,
+            '02 - Click Cart Button'
+        );
     }
-    // Encapsulates product verification inside the page object
+
     getCartItemByName(productName) {
-        return this.cartItems.filter({ hasText: productName });
+        return this.cartItems.filter({
+            hasText: productName
+        });
     }
 }
-export default AddToCart
+
+export default AddToCart;

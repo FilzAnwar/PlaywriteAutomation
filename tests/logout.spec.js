@@ -1,34 +1,60 @@
-import {test, expect} from '@playwright/test'
-import LogoutPage from '../pages/LogoutPage'
-import logoutdata from "../testdata/logoutdata.json" 
+import { test, expect } from '../fixtures/testSetup.js';
 
+import LogoutPage from '../pages/LogoutPage.js';
+import LoginPage from '../pages/LoginPage.js';
+
+import logoutdata from '../testdata/logoutdata.json';
 import logintestdata from '../testdata/logintestdata.json';
 
-import LoginPage from '../pages/LoginPage';
+import { attachStepScreenshot } from '../utilities/screenshot.js';
 
+test('Logout Page', async ({ page }) => {
 
-test('Add Product To Cart', async ({ page }) => {
-
-    const login = new LoginPage(page);
+ 
+   const login = new LoginPage(page);
     const logout = new LogoutPage(page);
 
-    const data = logintestdata.validUsers[0];
-    const data2 = logoutdata.MessageLogout[0];
+    const loginData = logintestdata.validUsers[0];
+    const logoutData = logoutdata.MessageLogout[0];
+    // LOGIN
+    await test.step('Login with valid credentials', async () => {
+        await login.login(
+            loginData.username,
+            loginData.password
+        );
+    });
 
-    // Login
-    await login.gotoURL();
-    await login.login(data.username, data.password);
+    // VERIFY LOGIN
+    await test.step('Verify login success message', async () => {
+        await expect(login.validmessageLocator)
+            .toHaveText(loginData.message);
 
-    await expect(login.validmessageLocator)
-        .toHaveText(data.message);
+        await attachStepScreenshot(
+            page,
+            '01 - Login Success'
+        );
+    });
 
-    // LOGOUt Page
-    
-    await logout.logout()
-     await expect(logout.messagelocator)
-        .toHaveText(data2.message);
+    // LOGOUT
+    await test.step('Logout from Application', async () => {
 
+        await logout.hamburger.click();
 
-  
+        await test.step('Click Logout button', async () => {
+            await logout.logoutButton.click();
+        });
 
+    });
+
+    // VERIFY LOGOUT
+    await test.step('Verify Logout Success', async () => {
+
+        await expect(logout.messagelocator)
+            .toHaveText(logoutData.message);
+
+        await attachStepScreenshot(
+            page,
+            '02 - Logout Success'
+        );
+    });
 });

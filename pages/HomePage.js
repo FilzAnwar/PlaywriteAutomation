@@ -1,3 +1,4 @@
+import { test } from "@playwright/test";
 class HomePage{
     constructor(page){
         this.page=page
@@ -15,13 +16,21 @@ class HomePage{
             '[data-test="inventory-container"]'
         );
     }
+     async attachScreenshot(name) {
+        await test.info().attach(name, {
+          body: await this.page.screenshot(),
+          contentType: "image/png",
+        });
+      }
     async gotoURL(){
         await this.page.goto('https://www.saucedemo.com/inventory.html')
+          await this.attachScreenshot("01 - Open URL")
     }
     async home(){
         // await this.addtocartButton.click()
         // await this.viewProduct.click()
         await this.sortButton.selectOption('za')
+          await this.attachScreenshot("02 - Click Sort Button Z-A")
         
 
 
