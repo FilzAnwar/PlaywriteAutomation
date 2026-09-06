@@ -1,0 +1,17 @@
+{
+  "baseUrl": "https://api-testing-postman.vercel.app/api/v1",
+  "initialUser": {
+    "fullname": "FILZA",
+    "username": "filzaeisha2026",
+    "email": "filzaeisha2026@test.com",
+    "password": "FILZA11"
+  },
+  "updateProfiles": {
+    "putUpdate": {
+      "fullname": "FILZA UPDATED"
+    },
+    "patchUpdate": {
+      "fullname": "FILZA UPDATED AGAIN"
+    }
+  }
+}
