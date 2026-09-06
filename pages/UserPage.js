@@ -1,168 +1,352 @@
-export class UserPage {
-  /**
-   * @param {import('@playwright/test').APIRequestContext} request
-   * @param {string} baseUrl
-   */
-  constructor(request, baseUrl) {
-    this.request = request;
-    this.baseUrl = baseUrl;
-  }
+class UserPage {
 
-  async login(credentials) {
+  async login(request, credentials, BASE_URL) {
+
     console.log("======================================");
     console.log("LOGIN");
     console.log("USERNAME:", credentials.username);
     console.log("EMAIL:", credentials.email);
+    console.log("PASSWORD:", credentials.password);
     console.log("======================================");
 
-    const response = await this.request.post(`${this.baseUrl}/users/login`, {
-      data: {
-        username: credentials.username,
-        email: credentials.email,
-        password: credentials.password,
-      },
-    });
+    const loginResponse = await request.post(
+      `${BASE_URL}/users/login`,
+      {
+        data: {
+          username: credentials.username,
+          email: credentials.email,
+          password: credentials.password,
+        },
+      }
+    );
 
-    const responseBody = await response.json();
+    const responseBody = await loginResponse.json();
+
     console.log("LOGIN RESPONSE:", responseBody);
-    console.log("LOGIN STATUS:", response.status());
+    console.log("LOGIN STATUS:", loginResponse.status());
 
-    return { response, responseBody };
+    return {
+      response: loginResponse,
+      body: responseBody,
+      token: responseBody.data.accessToken,
+    };
   }
 
-  async getCurrentUser(token) {
-    const response = await this.request.get(`${this.baseUrl}/users/current-user`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
 
-    const responseBody = await response.json();
+  async getCurrentUser(request, token, BASE_URL) {
+
+    const getResponse = await request.get(
+      `${BASE_URL}/users/current-user`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const responseBody = await getResponse.json();
+
     console.log("GET RESPONSE:", responseBody);
-    console.log("GET STATUS:", response.status());
+    console.log("GET STATUS:", getResponse.status());
 
-    return { response, responseBody };
+    return {
+      response: getResponse,
+      body: responseBody,
+    };
   }
 
-  async registerUser(token, registerData) {
+
+  async registerUser(
+    request,
+    token,
+    BASE_URL,
+    registerData
+  ) {
+
+    const uniqueId = Date.now();
+
+    const registerUserData = {
+      fullname: registerData.fullname,
+      email: `filza_${uniqueId}@test.com`,
+      username: `filza_${uniqueId}`,
+      password: registerData.password,
+    };
+
     console.log("======================================");
     console.log("REGISTER");
-    console.log("REGISTER DATA:", registerData);
+    console.log("REGISTER DATA:", registerUserData);
     console.log("======================================");
 
-    const response = await this.request.post(`${this.baseUrl}/users/register`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      data: registerData,
-    });
+    const registerResponse = await request.post(
+      `${BASE_URL}/users/register`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: registerUserData,
+      }
+    );
 
-    const responseBody = await response.json();
-    console.log("REGISTER RESPONSE:", responseBody);
-    console.log("REGISTER STATUS:", response.status());
+    const responseBody = await registerResponse.json();
 
-    return { response, responseBody };
+    console.log(
+      "REGISTER RESPONSE:",
+      responseBody
+    );
+
+    console.log(
+      "REGISTER STATUS:",
+      registerResponse.status()
+    );
+
+    return {
+      response: registerResponse,
+      body: responseBody,
+    };
   }
 
-  async replaceAccount(token, updateData) {
+
+  async replaceAccount(
+    request,
+    token,
+    BASE_URL,
+    putData
+  ) {
+
+    const uniqueId = Date.now();
+
+    const newUsername =
+      `filza_updated_${uniqueId}`;
+
+    const newEmail =
+      `filza_updated_${uniqueId}@test.com`;
+
     console.log("======================================");
     console.log("PUT ACCOUNT");
-    console.log("NEW USERNAME:", updateData.username);
-    console.log("NEW EMAIL:", updateData.email);
+    console.log("NEW USERNAME:", newUsername);
+    console.log("NEW EMAIL:", newEmail);
     console.log("======================================");
 
-    const response = await this.request.put(`${this.baseUrl}/users/replace-account`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      data: updateData,
-    });
+    const putResponse = await request.put(
+      `${BASE_URL}/users/replace-account`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: {
+          fullname: putData.fullname,
+          email: newEmail,
+          username: newUsername,
+        },
+      }
+    );
 
-    const responseBody = await response.json();
+    const responseBody = await putResponse.json();
+
     console.log("PUT RESPONSE:", responseBody);
-    console.log("PUT STATUS:", response.status());
+    console.log("PUT STATUS:", putResponse.status());
 
-    return { response, responseBody };
+    return {
+      response: putResponse,
+      body: responseBody,
+      newUsername: newUsername,
+      newEmail: newEmail,
+    };
   }
 
-  async updateAccountDetails(token, patchData) {
+
+  async updateAccount(
+    request,
+    token,
+    BASE_URL,
+    patchData
+  ) {
+
+    const patchEmail =
+      `filza_patch_${Date.now()}@test.com`;
+
     console.log("======================================");
     console.log("PATCH ACCOUNT");
-    console.log("NEW EMAIL:", patchData.email);
+    console.log("NEW EMAIL:", patchEmail);
     console.log("======================================");
 
-    const response = await this.request.patch(`${this.baseUrl}/users/update-account`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      data: patchData,
-    });
+    const patchResponse = await request.patch(
+      `${BASE_URL}/users/update-account`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: {
+          fullname: patchData.fullname,
+          email: patchEmail,
+        },
+      }
+    );
 
-    const responseBody = await response.json();
-    console.log("PATCH RESPONSE:", responseBody);
-    console.log("PATCH STATUS:", response.status());
+    const responseBody =
+      await patchResponse.json();
 
-    return { response, responseBody };
+    console.log(
+      "PATCH RESPONSE:",
+      responseBody
+    );
+
+    console.log(
+      "PATCH STATUS:",
+      patchResponse.status()
+    );
+
+    return {
+      response: patchResponse,
+      body: responseBody,
+      patchEmail: patchEmail,
+    };
   }
 
-  async changePassword(token, passwordData) {
+
+  async changePassword(
+    request,
+    token,
+    BASE_URL,
+    currentPassword
+  ) {
+
+    const oldPassword = currentPassword;
+
+    const newPassword =
+      `FILZA${Date.now()}NEW`;
+
     console.log("======================================");
     console.log("CHANGE PASSWORD");
-    console.log("OLD PASSWORD:", passwordData.oldPassword);
-    console.log("NEW PASSWORD:", passwordData.newPassword);
+    console.log("OLD PASSWORD:", oldPassword);
+    console.log("NEW PASSWORD:", newPassword);
     console.log("======================================");
 
-    const response = await this.request.post(`${this.baseUrl}/users/change-password`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      data: passwordData,
-    });
+    const changePasswordResponse =
+      await request.post(
+        `${BASE_URL}/users/change-password`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          data: {
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+          },
+        }
+      );
 
-    const responseBody = await response.json();
-    console.log("CHANGE PASSWORD RESPONSE:", responseBody);
-    console.log("CHANGE PASSWORD STATUS:", response.status());
+    const responseBody =
+      await changePasswordResponse.json();
 
-    return { response, responseBody };
+    console.log(
+      "CHANGE PASSWORD RESPONSE:",
+      responseBody
+    );
+
+    console.log(
+      "CHANGE PASSWORD STATUS:",
+      changePasswordResponse.status()
+    );
+
+    return {
+      response: changePasswordResponse,
+      body: responseBody,
+      newPassword: newPassword,
+    };
   }
 
-  async logout(token) {
+
+  async logout(request, token, BASE_URL) {
+
     console.log("======================================");
     console.log("LOGOUT");
     console.log("======================================");
 
-    const response = await this.request.post(`${this.baseUrl}/users/logout`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const logoutResponse =
+      await request.post(
+        `${BASE_URL}/users/logout`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    const responseBody = await response.json();
-    console.log("LOGOUT RESPONSE:", responseBody);
-    console.log("LOGOUT STATUS:", response.status());
+    const responseBody =
+      await logoutResponse.json();
 
-    return { response, responseBody };
+    console.log(
+      "LOGOUT RESPONSE:",
+      responseBody
+    );
+
+    console.log(
+      "LOGOUT STATUS:",
+      logoutResponse.status()
+    );
+
+    return {
+      response: logoutResponse,
+      body: responseBody,
+    };
   }
 
-  async deleteAccount(token) {
+
+  async deleteAccount(
+    request,
+    token,
+    BASE_URL,
+    credentials
+  ) {
+
     console.log("======================================");
     console.log("DELETE ACCOUNT");
+
+    console.log(
+      "USERNAME:",
+      credentials.username
+    );
+
+    console.log(
+      "EMAIL:",
+      credentials.email
+    );
+
     console.log("======================================");
 
-    const response = await this.request.delete(`${this.baseUrl}/users/delete-account`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const deleteResponse =
+      await request.delete(
+        `${BASE_URL}/users/delete-account`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    const responseBody = await response.json();
-    console.log("DELETE RESPONSE:", responseBody);
-    console.log("DELETE STATUS:", response.status());
+    const responseBody =
+      await deleteResponse.json();
 
-    return { response, responseBody };
+    console.log(
+      "DELETE RESPONSE:",
+      responseBody
+    );
+
+    console.log(
+      "DELETE STATUS:",
+      deleteResponse.status()
+    );
+
+    return {
+      response: deleteResponse,
+      body: responseBody,
+    };
   }
 }
+
+export default UserPage;

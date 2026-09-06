@@ -1,17 +1,23 @@
 {
-  "baseUrl": "https://api-testing-postman.vercel.app/api/v1",
-  "initialUser": {
+  "BASE_URL": "https://api-testing-postman.vercel.app/api/v1",
+
+  "TEST_USER": {
     "fullname": "FILZA",
     "username": "filzaeisha2026",
     "email": "filzaeisha2026@test.com",
     "password": "FILZA11"
   },
-  "updateProfiles": {
-    "putUpdate": {
-      "fullname": "FILZA UPDATED"
-    },
-    "patchUpdate": {
-      "fullname": "FILZA UPDATED AGAIN"
-    }
+
+  "REGISTER_USER": {
+    "fullname": "FILZA",
+    "password": "FILZA11"
+  },
+
+  "PUT_USER": {
+    "fullname": "FILZA UPDATED"
+  },
+
+  "PATCH_USER": {
+    "fullname": "FILZA UPDATED AGAIN"
   }
 }
