@@ -29,7 +29,7 @@ export default defineConfig({
     [
       "html",
       {
-        outputFolder: "Reporting",
+        outputFolder: "playwright-report",
         open: "never",
       },
     ],
